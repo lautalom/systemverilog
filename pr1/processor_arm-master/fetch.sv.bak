@@ -1,0 +1,32 @@
+module fetch
+	#(parameter N = 64)
+	(
+	input logic PCSrc_F, clk, reset,
+	input logic [N-1:0] PCBranch_F,
+	output logic [N-1:0] imem_addr_F
+	);
+		
+	logic [N-1:0] pcPlusFour;
+	logic [N-1:0] muxOutput;
+		
+	mux2 MUX(
+		.d0(pcPlusFour[N-1:0]),
+		.d1(PCBranch_F[N-1:0]),
+		.s(PCSrc_F),
+		.y(muxOutput[N-1:0])
+	);
+	
+	flopr PC (
+		.clk(clk),
+		.reset(reset),
+		.d(muxOutput[N-1:0]),
+		.q(imem_addr_F[N-1:0])
+	);
+	
+	adder ADD (
+		.a(imem_addr_F[N-1:0]),
+		.b(64'd4),
+		.y(pcPlusFour)
+	);
+		
+endmodule

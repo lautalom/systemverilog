@@ -1,0 +1,42 @@
+module execute
+	#(parameter N = 64)
+	(
+	input logic AluSrc,
+	input logic [3:0] AluControl,
+	input logic [N-1:0] PC_E, signImm_E, readData1_E, readData2_E,
+	output logic zero_E,
+	output logic [N-1:0] PCBranch_E, aluResult_E, writeData_E
+	);
+		
+	logic [N-1:0] muxOutput;
+	logic [N-1:0] slOutput;
+		
+	mux2 MUX(
+		.d0(readData2_E[N-1:0]),
+		.d1(signImm_E[N-1:0]),
+		.s(AluSrc),
+		.y(muxOutput[N-1:0])
+	);
+	
+	sl2 SL(
+		.a(signImm_E[N-1:0]),
+		.y(slOutput[N-1:0])
+	);
+	
+	adder ADD (
+		.a(PC_E[N-1:0]),
+		.b(slOutput[N-1:0]),
+		.y(PCBranch_E[N-1:0])
+	);
+	
+	alu ALU (
+		.a(readData1_E[N-1:0]),
+		.b(muxOutput[N-1:0]),
+		.ALUControl(AluControl[3:0]),
+		.result(aluResult_E[N-1:0]),
+		.zero(zero_E)
+	);
+	
+	assign writeData_E[N-1:0] = readData2_E[N-1:0];
+		
+endmodule

@@ -1,0 +1,15 @@
+
+from parse import *
+data = "C:\\Users\\lauta\\Desktop\\quartus\\2posta\\armv8_createAssembly\\main.list"
+with open(data) as f:
+    lines = f.readlines()
+    result = []
+    for l in lines[6:]:
+        # check if line is an instruction
+        if '\t' in l:
+            result.append('32\'h'+l.split()[1])
+    print(*result, sep=',\n')
+
+
+
+            
