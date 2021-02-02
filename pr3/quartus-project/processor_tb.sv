@@ -15,12 +15,12 @@ module processor_tb();
   always     // no sensitivity list, so it always executes
     begin
       #5 CLOCK_50 = ~CLOCK_50;
-		ExtIRQ = 0;
     end
 	 
 	 
   initial
     begin
+	 	ExtIRQ = 0;
       CLOCK_50 = 0; reset = 1; dump = 0;
       #30 reset = 0; 
       #800 dump = 1; 

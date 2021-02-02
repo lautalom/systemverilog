@@ -10,8 +10,9 @@ module maindec
 		output logic [3:0] EStatus);
 		
 		always_comb begin
-		if (~ExtIRQ) {Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, ALUOp, EStatus, ERet, NotAnInstr} = previous;
-		else begin 
+		if (ExtIRQ) 
+			{Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, ALUOp, EStatus, ERet, NotAnInstr} = previous;
+		//else begin 
 			casez(Op)
 			11'b111_1100_0010://LDUR
 			{Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, ALUOp, EStatus, ERet, NotAnInstr} =  {1'bx, 2'b01, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0, 2'b00, 4'b0000, 1'b0, 1'b0};
@@ -34,6 +35,6 @@ module maindec
 			default: //(1)  invalid opcode
 			{Reg2Loc, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, ALUOp, EStatus, ERet, NotAnInstr} = {1'bx,2'bxx,1'b0,1'b0,1'b0,1'b0,1'b0,2'bxx,4'b0010,1'b0, 1'b1};
 			endcase
-			end
+			//end
 		end	
 endmodule

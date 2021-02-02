@@ -13,6 +13,11 @@ module controller(input logic [10:0] instr,
 	logic [3:0] EStatusAux;
 	logic [1:0] ALUSrcAux, ALUOpAux;
 	logic NotAnInstr, Reg2LocAux, MemtoRegAux, RegWriteAux, MemReadAux, MemWriteAux, BranchAux, ERetAux;
+	
+	initial begin
+		{NotAnInstr, Reg2LocAux, MemtoRegAux, RegWriteAux, MemReadAux, MemWriteAux, BranchAux, ERetAux}= '0;
+		ALUSrcAux = 2'b0; ALUOpAux = 2'b0;
+	end
 											
 	maindec 	decPpal 	(.Op(instr),
 							.previous({reg2loc, AluSrc, memtoReg, regWrite, memRead, memWrite, Branch, AluOp_s, EStatus, ERet, Exc}),
