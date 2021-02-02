@@ -14,7 +14,8 @@ module controller(input logic [10:0] instr,
 	logic [1:0] ALUSrcAux, ALUOpAux;
 	logic NotAnInstr, Reg2LocAux, MemtoRegAux, RegWriteAux, MemReadAux, MemWriteAux, BranchAux, ERetAux;
 											
-	maindec 	decPpal 	(.Op(instr), 
+	maindec 	decPpal 	(.Op(instr),
+							.previous({reg2loc, AluSrc, memtoReg, regWrite, memRead, memWrite, Branch, AluOp_s, EStatus, ERet, Exc}),
 							.Reg2Loc(Reg2LocAux), 
 							.ALUSrc(ALUSrcAux), 
 							.MemtoReg(MemtoRegAux), 
@@ -35,7 +36,6 @@ module controller(input logic [10:0] instr,
 							.alucontrol(AluControl));
 							
 	assign ExtIAck = ExcAck & ExtIRQ;
-	//aca probar encerrar las señales enrte corchetes en vscode
 	
 	assign {reg2loc, AluSrc, memtoReg, regWrite, memRead, memWrite, Branch, AluOp_s, EStatus, ERet, Exc} = reset ? ({'0}) : 
 											(ExtIRQ ? {Reg2LocAux, ALUSrcAux, MemtoRegAux, RegWriteAux, MemReadAux, MemWriteAux, BranchAux, ALUOpAux, 4'b0001, ERetAux, ExtIRQ} :

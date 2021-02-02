@@ -17,23 +17,24 @@ module exception #(parameter N=64)
 		esync ESync (.reset(ExcAck),
 						.set(Exc),
 						.esync_out(esync_out));
-		
+		//64 bit register used to hold the address of the affected instruction
+		//needed even for vectored interrupts.
 		flopr_e ELR (.d(imem_addr_F),
 						.clk(clk),
 						.reset(reset),
-						.enable(~(reset)&&esync_out),
+						.enable(~(reset)&esync_out),
 						.q(elrout));
-		
+		//records cause of exception. In legv8 is 32 bits, although some unused
 		flopr_e #(4) ESR (.d(EStatus),
 						.clk(clk),
 						.reset(reset),
-						.enable(~(reset)&&esync_out),
+						.enable(~(reset)&esync_out),
 						.q(esrout));
-		
+		//Determines restart of execution
 		flopr_e ERR (.d(NextPC_F),
 						.clk(clk),
 						.reset(reset),
-						.enable(~(reset)&&esync_out),
+						.enable(~(reset)&esync_out),
 						.q(errout));
 		
 		mux4 MUX (.s(IM_readData),
@@ -48,8 +49,7 @@ module exception #(parameter N=64)
 					.d0(PCBranch_EX),
 					.y(PCBranch_EXP));
 					
-		assign EProc = ~reset&&esync_out;
+		assign EProc = ~reset&esync_out;
 		assign ExcVector = 64'hD8;
-
 
 endmodule
